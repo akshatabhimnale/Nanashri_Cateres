@@ -114,7 +114,7 @@ const NanashriCaterersForm = ({ route }) => {
               <td colspan="2"><h2 style="font-weight:200; font-size: 18px; border-collapse: collapse"><strong>Office:</strong> Shubharambh Colony, Near Jijamata Chowk, Walhekarwadi, Chinchwad, Pune - 411033 <br/><strong> Mobile No:</strong>8668976936</h2></td>
             </tr>
             <tr style="display:flex; flex-direction:row; ">
-              <td colspan="1" style="width:434px; font-size: 18px; border:none"><p><strong>Name:</strong> ${
+              <td colspan="1" style="width:355px; font-size: 18px; border:none"><p><strong>Name:</strong> ${
                 form.name
               }</p>
                 <p style="font-size: 18px;"><strong>Address:</strong> ${
@@ -130,7 +130,7 @@ const NanashriCaterersForm = ({ route }) => {
             </tr>
         </table>
           <div style="display:flex;">
-          <table style="height:100%; width:758px; margin-top:-1px;margin-right:-7px;border-right:none">
+          <table style="height:500px; width:758px; margin-top:-1px;margin-right:-7px;border-right:none">
             <thead>
               <tr>
                 <th style="text-align: center;  font-size: 15px ">Sr No.</th>
@@ -466,7 +466,7 @@ const NanashriCaterersForm = ({ route }) => {
             </tr>
         </table>
           <div style="display:flex;">
-          <table style="height:100%; width:920px; margin-top:-1px;margin-right:-7px;border-right:none">
+          <table style="height:550px; width:920px; margin-top:-1px;margin-right:-7px;border-right:none">
             <thead>
               <tr>
                 <th style="text-align: center;  font-size: 15px ">Sr No.</th>
