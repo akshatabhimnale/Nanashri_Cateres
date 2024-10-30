@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  Image,
   Animated,
 } from "react-native";
 import NanashriCaterersForm from "./Quotation"; // Adjust the path if needed
@@ -28,7 +27,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Animated.Image
-        source={require("./assets/logo.png")} // Adjust the path to your logo
+        source={require("./assets/logo.webp")} // Adjust the path to your logo
         style={[styles.logo, { transform: [{ scale: scaleAnim }] }]}
       />
       <Text style={styles.title}>What You Want To Create?</Text>
@@ -93,6 +92,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 15,
     paddingHorizontal: 30,
+    borderRadius:30,
     marginVertical: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -107,6 +107,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+    alignItems: "center",
+    justifyContent:"center",
   },
   logo: {
     width: 150, // Adjust the width as needed

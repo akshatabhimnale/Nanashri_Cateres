@@ -10,15 +10,13 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-
-import { captureRef } from "react-native-view-shot";
-import { useNavigation } from "@react-navigation/native";
 import * as Print from "expo-print";
 import { WebView } from "react-native-webview";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { Asset } from "expo-asset";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import logoBase64 from "./assets/logo";
 
 const NanashriCaterersForm = ({ route }) => {
   const { formTitle, pdfTitle } = route.params;
@@ -27,7 +25,7 @@ const NanashriCaterersForm = ({ route }) => {
   const [form, setForm] = useState({
     name: "",
     address: "",
-    mobileNumber: "+91",
+    mobileNumber: "",
     date: new Date(),
     time: new Date(),
     menuItems: [{ itemName: "" }],
@@ -42,26 +40,25 @@ const NanashriCaterersForm = ({ route }) => {
   };
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [logoBase64, setLogoBase64] = useState("");
+  // const [logoBase64, setLogoBase64] = useState(logoBase64);
 
   useEffect(() => {
-    const loadLogo = async () => {
-      try {
-        const logoAsset = Asset.fromModule(require("./assets/logo.png"));
-        await logoAsset.downloadAsync();
-        const base64Logo = await FileSystem.readAsStringAsync(
-          logoAsset.localUri,
-          {
-            encoding: FileSystem.EncodingType.Base64,
-          }
-        );
-        setLogoBase64(base64Logo);
-      } catch (error) {
-        console.error("Error loading logo:", error);
-      }
-    };
-
-    loadLogo();
+    //   const loadLogo = async () => {
+    //     try {
+    //       const logoAsset = Asset.fromModule(require("./assets/logo.webp"));
+    //       await logoAsset.downloadAsync();
+    //       const base64Logo = await FileSystem.readAsStringAsync(
+    //         logoAsset.localUri,
+    //         {
+    //           encoding: FileSystem.EncodingType.Base64,
+    //         }
+    //       );
+    //       setLogoBase64(`data:image/webp;base64,${ base64Logo }`);
+    //     } catch (error) {
+    //       console.error("Error loading logo:", error);
+    //     }
+    //   };
+    //   loadLogo();
   }, []);
 
   const handleInputChange = (name, value) => {
@@ -76,7 +73,7 @@ const NanashriCaterersForm = ({ route }) => {
   };
 
   const validateMobileNumber = (number) => {
-    const regex = /^\+91\d{10}$/;
+    const regex = /^\d{10}$/;
     return regex.test(number);
   };
 
@@ -84,7 +81,7 @@ const NanashriCaterersForm = ({ route }) => {
     if (!validateMobileNumber(form.mobileNumber)) {
       Alert.alert(
         "Error",
-        "Mobile number must start with +91 and be 10 digits long."
+        "Mobile number must be 10 digits."
       );
       return;
     }
@@ -107,7 +104,7 @@ const NanashriCaterersForm = ({ route }) => {
             <h1 style="justify-content:center; color: black; font-weight:400;font-size:20px"> ${pdfTitle}</h1>
             <table style="width: 100%; border-collapse: collapse; border-color:black; border: 1px solid">
             <tr style="display:flex; flex-direction:row; width:100%; border:none;">
-              <th style="border-collapse: collapse; border:none;"><img src="data:image/png;base64,${logoBase64}" style="height: 100px; width:100px; "/> </th>
+              <th style="border-collapse: collapse; border:none;"><img src="${logoBase64}" style="height: 100px; width:100px; "/> </th>
               <th style="border-collapse: collapse; border:none; align-items:center;margin-left:0px"><h1 style="width:600px">Nanashree Caterers</h1></th>
             </tr>
             <tr style="width:600px">
@@ -214,10 +211,10 @@ const NanashriCaterersForm = ({ route }) => {
       await FileSystem.moveAsync({ from: uri, to: pdfFileUri });
       Sharing.shareAsync(pdfFileUri);
 
-      Alert.alert(
-        "PDF created",
-        "The PDF was successfully created. You can now open, share it."
-      );
+      // Alert.alert(
+      //   "PDF created",
+      //   "The PDF was successfully created. You can now open, share it."
+      // );
 
       const sharePdf = () => {
         Sharing.shareAsync(pdfFileUri);
@@ -227,14 +224,7 @@ const NanashriCaterersForm = ({ route }) => {
         "PDF Ready",
         "What would you like to do?",
         [
-          {
-            text: "Open",
-            onPress: () =>
-              FileSystem.getContentUriAsync(pdfFileUri).then((uri) =>
-                Sharing.shareAsync(uri)
-              ),
-          },
-          { text: "Share", onPress: sharePdf },
+          { text: "Share/Open", onPress: sharePdf },
           { text: "Cancel", style: "cancel" },
         ],
         { cancelable: true }
@@ -255,17 +245,7 @@ const NanashriCaterersForm = ({ route }) => {
       Alert.alert("Limit Reached", "You can only add up to 50 menu items.");
     }
   };
-  const convertHtmlToImage = async () => {
-    try {
-      const uri = await captureRef(webViewRef, {
-        format: "jpg",
-        quality: 1,
-      });
-      setImageUri(uri);
-    } catch (error) {
-      console.error("Error capturing image:", error);
-    }
-  };
+
   const formattedDate = form.date.toLocaleDateString();
   const formattedTime = form.time.toLocaleTimeString([], {
     hour: "2-digit",
@@ -283,38 +263,38 @@ const NanashriCaterersForm = ({ route }) => {
         }}
       >
         <Image
-          source={require("./assets/logo.png")}
+          source={require("./assets/logo.webp")}
           style={{ width: 100, height: 100 }}
         />
       </View>
       <Text style={styles.subHeader}>{formTitle}</Text>
-      <Text style={{ fontWeight: 500 }}>Name:</Text>
+      <Text style={{ fontWeight: 500, marginTop: 5 }}>Name:</Text>
       <TextInput
         style={styles.input}
         placeholder="Name"
         value={form.name}
         onChangeText={(text) => handleInputChange("name", text)}
       />
-      <Text style={{ fontWeight: 500 }}>Address:</Text>
+      <Text style={{ fontWeight: 500, marginTop: 5 }}>Address:</Text>
       <TextInput
         style={styles.input}
         placeholder="Address"
         value={form.address}
         onChangeText={(text) => handleInputChange("address", text)}
       />
-      <Text style={{ fontWeight: 500 }}>Mobile Number:</Text>
+      <Text style={{ fontWeight: 500, marginTop: 5 }}>Mobile Number:</Text>
       <TextInput
         style={styles.input}
-        placeholder="Mobile Number (+91XXXXXXXXXX)"
+        placeholder="Mobile Number"
         keyboardType="numeric"
         value={form.mobileNumber}
         onChangeText={(text) => {
-          if (text.length <= 13) {
+          if (text.length <= 10) {
             handleInputChange("mobileNumber", text);
           }
         }}
       />
-      <Text style={{ fontWeight: 500 }}>Date:</Text>
+      <Text style={{ fontWeight: 500, marginTop: 5 }}>Date:</Text>
       <TouchableOpacity onPress={() => setShowDatePicker(true)}>
         <TextInput
           style={styles.input}
@@ -322,7 +302,7 @@ const NanashriCaterersForm = ({ route }) => {
           value={form.date.toLocaleDateString()}
           editable={false}
         />
-        <Text style={{ fontWeight: 500 }}>Time:</Text>
+        <Text style={{ fontWeight: 500, marginTop: 5 }}>Time:</Text>
       </TouchableOpacity>
       {showDatePicker && (
         <DateTimePicker
@@ -365,7 +345,9 @@ const NanashriCaterersForm = ({ route }) => {
       <Text style={styles.sectionHeader}>Menu</Text>
       {form.menuItems.map((item, index) => (
         <View key={index} style={styles.menuItem}>
-          <Text style={{ fontWeight: 500 }}>Item {index + 1}:</Text>
+          <Text style={{ fontWeight: 500, marginTop: 5 }}>
+            Item {index + 1}:
+          </Text>
           <View style={{ display: "flex", flexDirection: "row" }}>
             <TextInput
               style={styles.input}
@@ -443,7 +425,7 @@ const NanashriCaterersForm = ({ route }) => {
             <h1 style="justify-content:center; color: black; font-weight:400;font-size:20px"> ${pdfTitle}</h1>
             <table style="width: 100%; border-collapse: collapse; border-color:black; border: 1px solid">
             <tr style="display:flex; flex-direction:row; width:100%; border:none;">
-              <th style="border-collapse: collapse; border-right:none;"><img src="data:image/png;base64,${logoBase64}" style="height: 100px; width:100px; "/> </th>
+              <th style="border-collapse: collapse; border-right:none;"><img src="${logoBase64}" style="height: 100px; width:100px; "/> </th>
               <th style="border-collapse: collapse; border-left:none; align-items:center;margin-left:0px"><h1 style="width:782px">Nanashree Caterers</h1></th>
             </tr>
             <tr>
@@ -590,7 +572,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#db5c5c",
-    borderRadius: 5,
+    borderRadius: 35,
     paddingVertical: 15,
     alignItems: "center",
     marginTop: 20,
@@ -620,7 +602,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   webViewContainer: {
-    marginTop:10,
+    marginTop: 10,
     width: 350,
     height: 400, // Adjust height as needed
   },

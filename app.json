@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Nanashri_Cateres",
-    "slug": "Nanashri_Cateres",
+    "slug": "nanashree-cateres",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,8 +29,12 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "b552810a-b51b-4093-9513-887197a0b008"
+        "projectId": "1de6dfb0-4709-4719-8ef5-6e67f2e195c1"
       }
-    }
+    },
+    "owner": "paradoxp",
+    "assetBundlePatterns": [
+      "**/*" 
+    ]
   }
 }
